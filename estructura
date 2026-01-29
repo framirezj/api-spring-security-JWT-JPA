@@ -1,0 +1,38 @@
+src/
+├── main/
+│   ├── java/
+│   │   └── com/
+│   │       └── tuempresa/
+│   │           └── api/
+│   │               │
+│   │               ├── config/                   <-- Configuraciones generales
+│   │               │   └── SecurityConfig.java       (El "Cerebro" de la seguridad - Paso 8)
+│   │               │
+│   │               ├── controllers/              <-- Endpoints de la API
+│   │               │   ├── AuthController.java       (Login y Registro - Paso 9)
+│   │               │   └── TestController.java       (Controlador de prueba protegido)
+│   │               │
+│   │               ├── dto/                      <-- Data Transfer Objects (Datos de entrada)
+│   │               │   ├── LoginDto.java             (Clase simple con user y pass)
+│   │               │   └── RegisterDto.java          (Clase para datos de registro)
+│   │               │
+│   │               ├── models/ (o entities)      <-- Tablas de la BD
+│   │               │   ├── Role.java                 (Tabla Roles - Paso 3)
+│   │               │   └── UserEntity.java           (Tabla Usuarios - Paso 3)
+│   │               │
+│   │               ├── repositories/             <-- Acceso a Datos
+│   │               │   ├── RoleRepository.java       (SQL para Roles - Paso 4)
+│   │               │   └── UserRepository.java       (SQL para Usuarios - Paso 4)
+│   │               │
+│   │               ├── security/                 <-- Lógica pura de JWT y Auth
+│   │               │   ├── CustomUserDetailsService.java (Carga usuario desde BD - Paso 5)
+│   │               │   ├── JwtAuthenticationFilter.java  (Filtro por petición - Paso 7)
+│   │               │   └── JwtUtil.java              (Crear/Validar tokens - Paso 6)
+│   │               │
+│   │               └── ApiApplication.java       (Clase Main que arranca todo)
+│   │
+│   └── resources/
+│       ├── application.properties                (Conexión a BD y secretos - Paso 2)
+│       └── import.sql (o data.sql)               (Scripts para insertar roles al inicio - Paso 10)
+│
+└── pom.xml                                       (Dependencias Maven - Paso 1)
