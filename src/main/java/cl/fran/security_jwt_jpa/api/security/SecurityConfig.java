@@ -33,6 +33,11 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authRequest ->
                         authRequest
                                 .requestMatchers("/api/auth/**").permitAll() // Login y Register PÚBLICOS y lo demas requiere token
+                                .requestMatchers(
+                                        "/v3/api-docs/**",
+                                        "/swagger-ui/**",
+                                        "/swagger-ui.html"
+                                ).permitAll()
                                 .anyRequest().authenticated()
                         )
                 .sessionManagement(sessionManager ->
@@ -64,4 +69,6 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(); // Encriptación segura de contraseñas
     }
+
+
 }
