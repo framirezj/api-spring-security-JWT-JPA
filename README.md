@@ -110,10 +110,34 @@ eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VybmFtZSIsImV4cCI6MTY...
 
 > **Nota:** Utiliza este token en el header `Authorization: Bearer <token>` para acceder a endpoints protegidos.
 
-## 📂 Estructura del Proyecto
+### � Manejo de Errores
 
-- `api/controllers`: Controladores REST (ej. `AuthController`).
+La API implementa un manejo de errores centralizado (Global Exception Handling) para devolver respuestas JSON claras y consistentes en lugar de trazas de error.
+
+**Ejemplo de respuestas de error:**
+
+**401 Unauthorized (Token inválido o login fallido):**
+
+```json
+{
+  "error": "No autorizado",
+  "message": "Usuario o contraseña incorrectos"
+}
+```
+
+**400 Bad Request (Validación de datos):**
+
+```json
+{
+  "username": "no debe estar vacío",
+  "password": "el tamaño debe estar entre 8 y 20"
+}
+```
+
+## �📂 Estructura del Proyecto
+
+- `api/controllers`: Controladores REST (ej. `AuthController`) y Manejador Global (`GlobalExceptionHandler`).
 - `api/models`: Entidades JPA (`UserEntity`, `Role`).
 - `api/repositories`: Repositorios Spring Data (`UserRepository`, `RoleRepository`).
-- `api/security`: Configuración de JWT y Spring Security (`SecurityConfig`, `JwtUtil`, `JwtAuthenticationFilter`).
+- `api/security`: Configuración de JWT y Spring Security (`SecurityConfig`, `JwtUtil`, `JwtAuthenticationFilter`, `JwtAuthenticationEntryPoint`).
 - `api/dto`: Data Transfer Objects (`LoginDto`, `RegisterDto`).

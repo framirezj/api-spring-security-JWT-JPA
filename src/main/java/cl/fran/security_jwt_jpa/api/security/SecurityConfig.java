@@ -1,6 +1,5 @@
 package cl.fran.security_jwt_jpa.api.security;
 
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,24 +24,30 @@ public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final UserDetailsService userDetailsService;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint; // Inyectamos el EntryPoint
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable) // Deshabilitamos CSRF (no necesario en APIs REST stateless)
-                .authorizeHttpRequests(authRequest ->
-                        authRequest
-                                .requestMatchers("/api/auth/**").permitAll() // Login y Register PÚBLICOS y lo demas requiere token
-                                .requestMatchers(
-                                        "/v3/api-docs/**",
-                                        "/swagger-ui/**",
-                                        "/swagger-ui.html"
-                                ).permitAll()
-                                .anyRequest().authenticated()
-                        )
-                .sessionManagement(sessionManager ->
-                        sessionManager
-                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // No crear sesiones (JSESSIONID)
+                .exceptionHandling(exception -> exception.authenticationEntryPoint(jwtAuthenticationEntryPoint)) // Configuramos
+                                                                                                                 // el
+                                                                                                                 // manejo
+                                                                                                                 // de
+                                                                                                                 // excepciones
+                                                                                                                 // de
+                                                                                                                 // autenticación
+                .authorizeHttpRequests(authRequest -> authRequest
+                        .requestMatchers("/api/auth/**").permitAll() // Login y Register PÚBLICOS y lo demas requiere
+                                                                     // token
+                        .requestMatchers(
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html")
+                        .permitAll()
+                        .anyRequest().authenticated())
+                .sessionManagement(sessionManager -> sessionManager
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // No crear sesiones (JSESSIONID)
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
@@ -58,17 +63,14 @@ public class SecurityConfig {
         return authProvider;
     }
 
-
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
 
-
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(); // Encriptación segura de contraseñas
     }
-
 
 }
