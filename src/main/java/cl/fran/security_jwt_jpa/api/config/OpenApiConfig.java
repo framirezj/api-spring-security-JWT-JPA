@@ -15,7 +15,7 @@ public class OpenApiConfig {
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("API de Mi Proyecto")
+                        .title("API Spring Boot JWT + JPA")
                         .version("1.0")
                         .description("Documentación de mis endpoints"))
                 // Esto es lo que agrega el botón "Authorize" para el Token JWT
