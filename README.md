@@ -12,8 +12,19 @@ Este proyecto es una API RESTful construida con Spring Boot 4.0.2 y Java 25 que 
   - Spring Validation
 - **PostgreSQL** (Driver)
 - **JJWT (Java JWT)** 0.11.5
-- **SpringDoc OpenAPI** (Swagger UI) 2.3.0
+- **SpringDoc OpenAPI** (Swagger UI) 3.0.1
+- **Flyway Migration**
 - **Lombok**
+
+### 📦 Dependencias y Versiones Clave
+
+| Dependencia           | Versión   | Notas                  |
+| :-------------------- | :-------- | :--------------------- |
+| **Java**              | 25        | Requiere JDK 25        |
+| **Spring Boot**       | 4.0.2     | Core framework         |
+| **SpringDoc OpenAPI** | 3.0.1     | Documentación Swagger  |
+| **Flyway**            | (Managed) | Gestión de migraciones |
+| **JJWT**              | 0.11.5    | Autenticación JWT      |
 
 ## 📋 Prerrequisitos
 
@@ -40,16 +51,18 @@ Asegúrate de tener instalado:
     spring.datasource.url=jdbc:postgresql://localhost:5432/tu_base_de_datos
     spring.datasource.username=tu_usuario
     spring.datasource.password=tu_contraseña
-    spring.jpa.hibernate.ddl-auto=update
+    spring.jpa.hibernate.ddl-auto=validate
     ```
 
-3.  **Insertar Roles Iniciales:**
+    > **Nota:** Al usar Flyway, se recomienda usar `validate` o `none` para que Hibernate no modifique el esquema, ya que Flyway se encarga de ello.
 
-    El sistema requiere que el rol `ROLE_USER` exista en la base de datos antes de registrar usuarios. Ejecuta el siguiente SQL en tu base de datos:
+3.  **Migración de Base de Datos:**
 
-    ```sql
-    INSERT INTO roles (name) VALUES ('ROLE_USER');
-    ```
+    El proyecto utiliza **Flyway** para gestionar el esquema de la base de datos. Al iniciar la aplicación, Flyway automáticamente:
+    - Creará las tablas necesarias.
+    - Insertará los datos iniciales (como el `ROLE_USER` definido en `V2__insert_initial_roles.sql`).
+
+    **No es necesario ejecutar scripts SQL manualmente.**
 
 4.  **Ejecutar la Aplicación:**
 
