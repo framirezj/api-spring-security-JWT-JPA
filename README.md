@@ -43,28 +43,54 @@ Asegúrate de tener instalado:
     cd security-jwt-jpa
     ```
 
-2.  **Configurar Base de Datos:**
+2.  **Configurar Variables de Entorno (.env):**
 
-    Abre el archivo `src/main/resources/application.properties` (o `application.yml`) y configura tus credenciales de PostgreSQL:
+    Crea un archivo `.env` en la raíz del proyecto (basado en `.env.example`) para definir las credenciales de la base de datos y JWT.
 
-    ```properties
-    spring.datasource.url=jdbc:postgresql://localhost:5432/tu_base_de_datos
-    spring.datasource.username=tu_usuario
-    spring.datasource.password=tu_contraseña
-    spring.jpa.hibernate.ddl-auto=validate
+    ```bash
+    # Perfil activo: dev (local) o prod (producción)
+    SPRING_PROFILES_ACTIVE=dev
+
+    # Base de Datos PostgreSQL
+    POSTGRES_DB=securityjwtjpa
+    POSTGRES_USER=postgres
+    POSTGRES_PASSWORD=postgres
+
+    # JWT
+    JWT_SECRET=tu_secreto_en_base64
+    JWT_EXPIRATION=86400000
     ```
 
-    > **Nota:** Al usar Flyway, se recomienda usar `validate` o `none` para que Hibernate no modifique el esquema, ya que Flyway se encarga de ello.
+3.  **Perfiles de Entorno:**
 
-3.  **Migración de Base de Datos:**
+    El proyecto soporta dos perfiles principales:
+    - **`dev` (Desarrollo):**
+      - Habilita Swagger UI (`/swagger-ui.html`).
+      - Muestra logs de debug para seguridad.
+      - Conecta a la base de datos usando las variables del `.env`.
 
-    El proyecto utiliza **Flyway** para gestionar el esquema de la base de datos. Al iniciar la aplicación, Flyway automáticamente:
+    - **`prod` (Producción):**
+      - **Deshabilita** Swagger UI y la documentación de la API.
+      - Reduce el nivel de logs.
+      - Conecta a la base de datos usando las mismas variables `POSTGRES_...`, lo que facilita el despliegue en servidores con Docker.
+
+4.  **Ejecutar con Docker Compose (Recomendado):**
+
+    ```bash
+    docker-compose up --build
+    ```
+
+    Esto levantará tanto la base de datos PostgreSQL como la API.
+
+5.  **Migración de Base de Datos (Automática):**
+
+    El proyecto utiliza **Flyway** para gestionar el esquema de la base de datos via SQL. Al iniciar la aplicación (sea por Docker o manual), Flyway:
     - Creará las tablas necesarias.
-    - Insertará los datos iniciales (como el `ROLE_USER` definido en `V2__insert_initial_roles.sql`).
+    - Insertará los datos iniciales.
 
-    **No es necesario ejecutar scripts SQL manualmente.**
+6.  **Ejecutar la Aplicación (Modo Manual):**
 
-4.  **Ejecutar la Aplicación:**
+    Si no usas Docker Compose, asegura que tu base de datos esté corriendo y las variables de entorno cargadas, luego:
 
     ```bash
     mvn spring-boot:run
